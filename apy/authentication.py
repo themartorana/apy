@@ -52,7 +52,7 @@ class oauth_protect():
         uri = "%s://%s%s" % (parsed.scheme,parsed.netloc,parsed.path)
 
         req = oauth2.Request.from_request(
-            request.method,
+            'GET', #request.method,
             uri,
             headers=auth_header,
             # the immutable type of "request.values" prevents us from sending
@@ -63,7 +63,8 @@ class oauth_protect():
         try:
             consumer = self.load_consumer()
             oauth_server.verify_request(req,
-                consumer(request.values.get('oauth_consumer_key')),
+                #consumer(request.values.get('oauth_consumer_key')),
+                consumer(req['oauth_consumer_key']),
                 None)
             return True
         except oauth2.Error, e:
@@ -76,3 +77,4 @@ class oauth_protect():
 
 
 oauth_protect.default_consumer = sample_consumer
+
