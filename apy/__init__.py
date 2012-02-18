@@ -69,7 +69,7 @@ class Endpoint(object):
                 '''Attempts to catch any calls to specific http errors and abstract those to the __error__ handler'''
                 match = re.search('error_(?P<code>\d+)',key)
                 if match: return lambda *args,**kwargs: self.__error__(match.group('code'),*args,**kwargs)
-                return data[key]
+                return data.get(key, None)
 
             def httpgenerator(self,method):
                 '''Generator function to pre-define routing of http functions to the __http__ handler'''
@@ -131,3 +131,4 @@ class Endpoint(object):
 
 app = __app__
 app.url_map.converters['regex'] = RegexConverter
+
