@@ -50,6 +50,7 @@ class oauth_protect():
 
         parsed = urlparse(request.url)
         uri = "%s://%s%s" % (parsed.scheme,parsed.netloc,parsed.path)
+        uri = uri.replace('http:', 'https:')
 
         req = oauth2.Request.from_request(
             'GET', #request.method,
