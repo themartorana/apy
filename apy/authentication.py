@@ -28,18 +28,8 @@ class oauth_protect():
 
     def __call__(self,fn,*args,**kwargs):
         def decorated_function(*args, **kwargs):
-            try:
-                self.validate_two_leg_oauth()
-                return fn(*args, **kwargs)
-            except Exception, exception:
-                tb = traceback.format_exception(*sys.exc_info())
-                json_to_write = {
-                    'response': 'error',
-                    'exception': 'OAuth authentication unsuccessful',
-                    'traceback': tb
-                }
-                logging.error('ERROR: %s' % exception)
-                return json_to_write
+            self.validate_two_leg_oauth()
+            return fn(*args, **kwargs)
         return decorated_function
 
     def load_consumer(self):
@@ -84,7 +74,7 @@ class oauth_protect():
             print sys.exc_info()
             import traceback
             traceback.print_tb(sys.exc_info()[2])
-            raise Unauthorized("You failed to supply the necessary parameters to properly authenticate")
+            raise Unauthorized,"You failed to supply the necessary parameters to properly authenticate"
 
 
 oauth_protect.default_consumer = sample_consumer
