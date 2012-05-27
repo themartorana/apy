@@ -63,7 +63,7 @@ class oauth_protect():
      
         try:
             consumer = self.load_consumer()
-            if hasattr(consumer, banned) and consumer.banned:
+            if hasattr(consumer, 'banned') and consumer.banned:
                 raise Unauthorized, 'This device has been banned'
             oauth_server.verify_request(req,
                 #consumer(request.values.get('oauth_consumer_key')),
