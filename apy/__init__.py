@@ -25,9 +25,9 @@ class Endpoint(object):
         except:
             self.default_type = default_type
 
-        mutated_paths = []
+        self.mutated_paths = []
         for path in paths:
-            mutated_paths.append(self.mutatepath(path))
+            self.mutated_paths.append(self.mutatepath(path))
         self.auth = auth
         self.rate = rate
 
