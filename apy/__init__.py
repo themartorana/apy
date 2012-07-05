@@ -15,7 +15,7 @@ __app__.always_authenticate = False
 class Endpoint(object):
     '''Main data endpoint class, manages'''    
 
-    def __init__(self,path,auth=None,rate=None,types=['json','xml'],default_type=None):
+    def __init__(self,paths,auth=None,rate=None,types=['json','xml'],default_type=None):
         '''Initializes the endpoint and sets the target path'''
         self.data = {}
         self.types = ['\.%s' % t for t in types]
@@ -25,7 +25,9 @@ class Endpoint(object):
         except:
             self.default_type = default_type
 
-        self.path = self.mutatepath(path)
+        mutated_paths = []
+        for path in paths:
+            mutated_paths.append(self.mutatepath(path))
         self.auth = auth
         self.rate = rate
 
@@ -125,7 +127,8 @@ class Endpoint(object):
                 }
                 return make_response(json.dumps(data),"%s %s" % (code,str(sys.exc_info()[1])))(env,start_response)
 
-        __app__.add_url_rule(self.path, view_func=Wrapped.as_view(cls.__name__))
+        for path in self.mutated_paths:
+            __app__.add_url_rule(path, view_func=Wrapped.as_view(cls.__name__))
 
         return Wrapped
 
